@@ -92,6 +92,11 @@ make run-dev          # Docker compose up
 make run-backend      # Solo backend (sin Docker)
 make run-frontend     # Solo frontend (sin Docker)
 
+# Base de datos
+make migrate          # Ejecutar migraciones Alembic
+make seed             # Precargar datos de ejemplo (admin@example.com / admin123)
+make backup-db        # Backup de SQLite con timestamp
+
 # Calidad
 make lint             # Ruff + Biome
 make format           # Formateo automático
@@ -100,7 +105,6 @@ make type-check       # Type checking
 
 # Producción
 make build            # Construir contenedores
-make backup-db        # Backup de SQLite con timestamp
 make clean            # Limpieza profunda
 ```
 
@@ -121,18 +125,41 @@ cp .env.example .env
 Principales variables:
 - `SECRET_KEY` - Clave secreta para JWT (dejar vacío para generación automática)
 - `DATABASE_URL` - URL de conexión a SQLite
-- `BACKEND_CORS_ORIGINS_RAW` - Orígenes permitidos para CORS (formato JSON)
+- `BACKEND_CORS_ORIGINS_RAW` - Orígenes permitidos para CORS (formato JSON o comma-separated)
 - `DISABLE_DOCS` - Deshabilitar `/docs`, `/redoc` y `/openapi.json` en producción (default: `False`)
+- `ENABLE_OTEL` - Habilitar OpenTelemetry para tracing (default: `True`)
+- `OTEL_EXPORTER_OTLP_ENDPOINT` - Endpoint del colector OTLP (Jaeger/Tempo)
 
 ### Base de Datos
 
 Las migraciones se gestionan con Alembic:
 
 ```bash
+# Crear nueva migración
 cd backend
 alembic revision --autogenerate -m "Descripción"
-alembic upgrade head
+
+# Aplicar migraciones
+make migrate
+
+# Precargar datos de ejemplo
+make seed
+# Usuario por defecto: admin@example.com / admin123
 ```
+
+### Observabilidad (OpenTelemetry)
+
+El proyecto incluye soporte nativo para tracing distribuido:
+
+```bash
+# Iniciar con Jaeger (tracing)
+docker compose --profile monitoring up
+
+# Acceder a UI de Jaeger
+http://localhost:16686
+```
+
+Los traces se exportan automáticamente cuando `ENABLE_OTEL=True`.
 
 ## 🐳 Docker
 
