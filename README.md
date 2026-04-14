@@ -126,8 +126,6 @@ Principales variables:
 - `DATABASE_URL` - URL de conexión a SQLite
 - `BACKEND_CORS_ORIGINS_RAW` - Orígenes permitidos para CORS (formato JSON o comma-separated)
 - `DISABLE_DOCS` - Deshabilitar `/docs`, `/redoc` y `/openapi.json` en producción (default: `False`)
-- `ENABLE_OTEL` - Habilitar OpenTelemetry para tracing (default: `True`)
-- `OTEL_EXPORTER_OTLP_ENDPOINT` - Endpoint del colector OTLP (Jaeger/Tempo)
 
 ### Base de Datos
 
@@ -146,19 +144,18 @@ make seed
 # Usuario por defecto: admin@example.com / admin123
 ```
 
-### Observabilidad (OpenTelemetry)
+## 🚀 Quick Start (Un solo comando)
 
-El proyecto incluye soporte nativo para tracing distribuido:
+Para iniciar el proyecto desde cero con un solo comando:
 
 ```bash
-# Iniciar con Jaeger (tracing)
-docker compose --profile monitoring up
-
-# Acceder a UI de Jaeger
-http://localhost:16686
+make dev
 ```
 
-Los traces se exportan automáticamente cuando `ENABLE_OTEL=True`.
+Esto ejecutará automáticamente:
+1. Instalación de dependencias (backend + frontend)
+2. Migraciones de base de datos
+3. Inicio de servicios con Docker Compose
 
 ## 🐳 Docker
 
