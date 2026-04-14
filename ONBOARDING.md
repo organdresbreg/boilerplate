@@ -1,112 +1,105 @@
-# 🚀 ONBOARDING: Tu Nuevo Proyecto Empieza Aquí
+# ONBOARDING - Guía de Implementación
 
-> **⚠️ ALTO:** Este repo es una **Plantilla Maestra**. No codes aquí directamente.
-> Sigue estos pasos para clonarlo, limpiarlo y lanzar tu próximo proyecto en < 5 minutos.
+> **Nota Importante**: Este repositorio funciona como una **Plantilla Maestra (Boilerplate)**. No debe utilizarse directamente como un proyecto de producción sin antes realizar los pasos de inicialización descritos a continuación.
 
----
+## 1. Inicialización del Proyecto
 
-## 1. El "Ritual" de Inicio (Copiar y Limpiar)
+El primer paso consiste en clonar esta plantilla y limpiar su historial de versiones para comenzar un nuevo proyecto desde cero.
 
-No necesitas herramientas complejas. Solo terminal.
+### 1.1. Clonar y Limpiar Historial
+Ejecutar los siguientes comandos en la terminal:
 
-### Paso 1: Clona y entra
 ```bash
-git clone <URL_DE_ESTA_PLANTILLA> mi-nuevo-proyecto
-cd mi-nuevo-proyecto
-```
+# 1. Clonar la plantilla en una nueva carpeta con el nombre de tu proyecto
+git clone <URL_DEL_REPOSITORIO_PLANTILLA> <nombre-del-nuevo-proyecto>
 
-### Paso 2: Borra el pasado (Limpia el .git)
-Queremos un historial limpio, solo tuyo.
-```bash
+# 2. Ingresar al directorio
+cd <nombre-del-nuevo-proyecto>
+
+# 3. Eliminar la referencia al repositorio original (.git)
 rm -rf .git
+
+# 4. Inicializar un nuevo repositorio Git
 git init
+
+# 5. Realizar el commit inicial
+git add .
+git commit -m "feat: initial project setup based on master boilerplate"
 ```
 
-### Paso 3: Conecta tu propio remoto
-Crea tu repo vacío en GitHub/GitLab y conéctalo:
+### 1.2. Configurar Repositorio Remoto
+Vincular el nuevo proyecto con su repositorio remoto en GitHub, GitLab o similar:
+
 ```bash
-git remote add origin git@github.com:tu-usuario/mi-nuevo-proyecto.git
+git remote add origin <URL_DEL_NUEVO_REPOSITORIO>
 git branch -M main
-git add .
-git commit -m "✨ Initial commit: Boilerplate listo para volar"
 git push -u origin main
 ```
 
-✅ **¡Listo!** Ahora eres el único dueño de este código.
+## 2. Personalización Esencial
 
----
+Antes de comenzar el desarrollo, es necesario adaptar los metadatos y la configuración base a las necesidades específicas del nuevo proyecto.
 
-## 2. Personalización Express (5 Minutos)
+### 2.1. Actualización de Metadatos
+Revise y edite los siguientes archivos:
+- **`README.md`**: Actualice título, descripción, badges y enlaces específicos del proyecto.
+- **`package.json`** (Frontend) y **`pyproject.toml`** (Backend): Modifique `name`, `version`, `description` y `author`.
+- **`LICENSE`**: Confirme que el año y el titular del copyright sean correctos.
+- **`.env.example`**: Ajuste las variables de entorno si el nuevo proyecto requiere servicios adicionales.
 
-Antes de escribir lógica de negocio, ajusta lo básico para que sea *tuyo*.
+### 2.2. Definición de Especificaciones (`specs.md`)
+Se recomienda crear un archivo `specs.md` en la raíz del proyecto. Este documento servirá como la fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
 
-### A. Define las reglas del juego (`specs.md`)
-Crea un archivo `specs.md` en la raíz. No tiene que ser formal. Escribe:
-- ¿Qué problema resuelve esto?
-- ¿Qué funcionalidades sí o sí necesita el MVP?
-- ¿Algún requisito técnico raro? (Ej: "El cliente quiere MySQL en vez de SQLite").
-> *Tip: Usa este archivo como brújula cuando te pierdas en el código.*
+**Contenido sugerido para `specs.md`:**
+- Objetivos del negocio.
+- Reglas de validación y lógica específica.
+- Integraciones de terceros requeridas.
+- Decisiones técnicas que desvíen del stack estándar.
 
-### B. Limpia la identidad
-- [ ] **README.md**: Cambia el título, descripción y badges. Borra lo que no sirva.
-- [ ] **package.json / pyproject.toml**: Actualiza `name`, `version` (ponla en 0.0.1) y `author`.
-- [ ] **.env.example**: Revisa si necesitas cambiar puertos o secretos por defecto.
+## 3. Flujo de Trabajo Recomendado
 
----
+Para mantener la integridad del código y la eficiencia en el desarrollo:
 
-## 3. Tu Flujo de Trabajo (Sin Fricción)
+1.  **Análisis**: Lea `stack.md` (arquitectura base) y `specs.md` (requisitos del proyecto).
+2.  **Configuración**: Copie `.env.example` a `.env` y ajuste las credenciales locales.
+3.  **Desarrollo**: Utilice ramas temáticas (`feature/nombre-funcionalidad`) para cada nueva capacidad.
+4.  **Validación**: Ejecute `make test` o los scripts de testing definidos antes de cada commit.
+5.  **Despliegue**: Utilice los contenedores Docker configurados para simular el entorno de producción localmente.
 
-Esta plantilla ya trae todo configurado. Úsala así:
+## 4. Mantenimiento y Actualizaciones
 
-1.  **Levanta el entorno:**
-    ```bash
-    make dev  # O docker-compose up --build
-    ```
-    *(Backend en localhost:8000, Frontend en localhost:5173)*
+Si la Plantilla Maestra recibe actualizaciones críticas (parches de seguridad, mejoras de rendimiento), es posible integrarlas en el proyecto derivado.
 
-2.  **Codifica:**
-    - Backend: `/backend/app`
-    - Frontend: `/frontend/src`
-    - La estructura ya es escalable, no la sobrepienses.
-
-3.  **Commit & Push:**
-    Usa mensajes simples. Ej: `feat: login de usuarios`, `fix: error en css`.
-
----
-
-## 4. ¿Cómo actualizo la Plantilla en el futuro?
-
-Si saco una nueva versión de esta plantilla con mejoras (ej: nuevo Dockerfile, mejor config de Vite) y quieres traerla a tu proyecto:
-
+**Procedimiento de sincronización:**
 ```bash
-# Agrega la plantilla como un remoto lejano (solo se hace una vez)
-git remote add template <URL_DE_ESTA_PLANTILLA>
+# Agregar la plantilla como un repositorio remoto llamado 'upstream'
+git remote add upstream <URL_DEL_REPOSITORIO_PLANTILLA>
 
-# Trae los cambios
-git fetch template
-git merge template/main --allow-unrelated-histories
+# Obtener los cambios
+git fetch upstream
+
+# Intentar fusionar los cambios (puede requerir resolución de conflictos)
+git merge upstream/main --allow-unrelated-histories
 ```
-> **Ojo:** Revisa los conflictos con calma. Generalmente querrás mantener tus configs (`.env`, `specs.md`) pero aceptar las mejoras en archivos de sistema (`Dockerfile`, `Makefile`).
+*Nota: Resuelva los conflictos priorizando la lógica de negocio específica de su proyecto sobre las configuraciones genéricas de la plantilla.*
+
+## 5. Checklist de Verificación Pre-Inicio
+
+Asegúrese de completar esta lista antes de iniciar el desarrollo activo:
+
+- [ ] Historial de Git original eliminado y nuevo repositorio inicializado.
+- [ ] Repositorio remoto configurado correctamente.
+- [ ] Archivo `specs.md` creado con los requisitos del proyecto.
+- [ ] Metadatos en `README`, `package.json` y `pyproject.toml` actualizados.
+- [ ] Archivo `.env` generado y configurado con valores locales.
+- [ ] Contenedores Docker iniciados correctamente (`make dev` o `docker-compose up`).
+- [ ] Tests básicos ejecutados sin errores.
+
+## 6. Referencias Técnicas
+
+- **`stack.md`**: Especificación técnica detallada de la arquitectura, dependencias y estructura de directorios.
+- **`README.md`**: Documentación pública del proyecto, instrucciones de instalación y uso.
+- **`CONTRIBUTING.md`**: Normas y estándares de código para contribuciones futuras.
 
 ---
-
-## 5. Checklist de Despegue 🛫
-
-Antes de empezar a tirar líneas de lógica de negocio:
-
-- [ ] ¿Borraste el `.git` original e iniciaste uno nuevo?
-- [ ] ¿Hiciste push a TU repositorio remoto?
-- [ ] ¿Creaste tu `specs.md` con las ideas claras?
-- [ ] ¿Actualizaste el `README.md` para que no diga "Boilerplate"?
-- [ ] ¿Corriste `make dev` y ves la app funcionando?
-
-Si marcaste todo, **estás en el negocio**. ¡A codear! 💻🔥
-
----
-
-### ¿Dudas rápidas?
-- **Stack Técnico:** Lee `stack.md` (la biblia técnica).
-- **Comandos:** Mira el `Makefile` o `docker-compose.yml`.
-- **Estructura:** Explora las carpetas `/backend` y `/frontend`.
-
-*Hecho con ❤️ para desarrolladores que quieren construir, no configurar.*
+*Versión del documento: 1.0 | Basado en Arquitectura Full-Stack Moderna (2026)*
