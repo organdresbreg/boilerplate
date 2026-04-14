@@ -1,14 +1,14 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery } from '../hooks/useQuery'
 
 export function Home() {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['health'],
-    queryFn: async () => {
+  const { data, isLoading, error } = useQuery<{ status: string; version: string; year: number }>(
+    ['health'],
+    async () => {
       const res = await fetch('/api/health')
       if (!res.ok) throw new Error('Network response was not ok')
       return res.json()
-    },
-  })
+    }
+  )
 
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error loading health check</div>

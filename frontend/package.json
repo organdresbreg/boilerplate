@@ -12,11 +12,11 @@
   },
   "dependencies": {
     "@preact/preset-vite": "^2.9.0",
-    "@tanstack/react-query": "^5.56.0",
     "preact": "^10.29.0",
     "preact-router": "^4.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/preact": "^3.2.0",
     "@types/node": "^22.0.0",
     "jsdom": "^24.0.0",

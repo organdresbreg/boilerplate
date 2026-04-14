@@ -43,7 +43,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['preact', 'preact/hooks', 'preact/compat'],
-          query: ['@tanstack/react-query'],
         },
       },
     },

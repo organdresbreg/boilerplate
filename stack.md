@@ -55,7 +55,7 @@
 | **Build Tool** | Vite 5.0+ | HMR instantáneo, build optimizado, ES2025 |
 | **Lenguaje** | TypeScript 5.0+ | Inferencia mejorada, módulos ES2025, decorators stage 3 |
 | **Estado** | Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
-| **HTTP Client** | TanStack Query 5.5+ | Offline-first, persistencia automática, optimistic updates |
+| **HTTP Client** | Custom hook useQuery | Ligero, sin dependencias externas, minimalista |
 | **Estilos** | TailwindCSS 4.0+ (Opcional) | Motor Oxide (Rust), zero-config, CSS nativo cuando es posible |
 | **Router** | Preact Router 7.0+ | Lazy loading nativo, transiciones integradas |
 | **Forms** | Preact Hook Form 2.0+ | Validación performante, menos re-renders |
@@ -263,7 +263,7 @@ export default defineConfig({
       output: {
         manualChunks: {
           vendor: ['preact', 'preact/hooks', 'preact/compat'],
-          query: ['@tanstack/react-query'],
+
         },
       },
     },
@@ -275,29 +275,15 @@ export default defineConfig({
 ```
 
 ### `frontend/src/main.tsx`
-Entry point limpio con Preact Signals y TanStack Query.
+Entry point limpio con Preact y custom hook useQuery.
 
 ```tsx
 import { render } from 'preact'
 import { App } from './App'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './index.css'
 
-// Configurar Query Client para 2026
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5,  // 5 minutos
-      retry: 2,
-      refetchOnWindowFocus: false,
-    },
-  },
-})
-
-render(
   <QueryClientProvider client={queryClient}>
     <App />
-  </QueryClientProvider>,
   document.getElementById('app')!
 )
 ```
