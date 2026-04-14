@@ -1,13 +1,14 @@
-# ONBOARDING - Guía de Implementación
+# 🚀 ONBOARDING - Guía de Implementación
 
-> **Nota Importante**: Este repositorio funciona como una **Plantilla Maestra (Boilerplate)**. No debe utilizarse directamente como un proyecto de producción sin antes realizar los pasos de inicialización descritos a continuación.
+> **⚠️ Nota Importante**: Este repositorio es una **Plantilla Maestra (Boilerplate)**. No lo uses directamente como proyecto de producción sin antes seguir los pasos de inicialización.
 
-## 1. Inicialización del Proyecto
+## 1. 📦 Inicialización del Proyecto
 
-El primer paso consiste en clonar esta plantilla y limpiar su historial de versiones para comenzar un nuevo proyecto desde cero.
+El primer paso es clonar esta plantilla y limpiar su historial para comenzar tu nuevo proyecto desde cero.
 
 ### 1.1. Clonar y Limpiar Historial
-Ejecutar los siguientes comandos en la terminal:
+
+Ejecutá estos comandos en tu terminal:
 
 ```bash
 # 1. Clonar la plantilla en una nueva carpeta con el nombre de tu proyecto
@@ -27,8 +28,9 @@ git add .
 git commit -m "feat: initial project setup based on master boilerplate"
 ```
 
-### 1.2. Configurar Repositorio Remoto
-Vincular el nuevo proyecto con su repositorio remoto en GitHub, GitLab o similar:
+### 1.2. 🔗 Configurar Repositorio Remoto
+
+Vinculá tu nuevo proyecto con su repositorio remoto en GitHub, GitLab o similar:
 
 ```bash
 git remote add origin <URL_DEL_NUEVO_REPOSITORIO>
@@ -36,41 +38,45 @@ git branch -M main
 git push -u origin main
 ```
 
-## 2. Personalización Esencial
+## 2. 🎨 Personalización Esencial
 
-Antes de comenzar el desarrollo, es necesario adaptar los metadatos y la configuración base a las necesidades específicas del nuevo proyecto.
+Antes de empezar a desarrollar, adaptá los metadatos y la configuración base a las necesidades de tu proyecto.
 
-### 2.1. Actualización de Metadatos
-Revise y edite los siguientes archivos:
-- **`README.md`**: Actualice título, descripción, badges y enlaces específicos del proyecto.
-- **`package.json`** (Frontend) y **`pyproject.toml`** (Backend): Modifique `name`, `version`, `description` y `author`.
-- **`LICENSE`**: Confirme que el año y el titular del copyright sean correctos.
-- **`.env.example`**: Ajuste las variables de entorno si el nuevo proyecto requiere servicios adicionales.
+### 2.1. 📝 Actualización de Metadatos
 
-### 2.2. Definición de Especificaciones (`specs.md`)
-Se recomienda crear un archivo `specs.md` en la raíz del proyecto. Este documento servirá como la fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
+Revisá y editá estos archivos:
+
+- **`README.md`**: Actualizá título, descripción, badges y enlaces específicos de tu proyecto.
+- **`package.json`** (Frontend) y **`pyproject.toml`** (Backend): Modificá `name`, `version`, `description` y `author`.
+- **`LICENSE`**: Confirmá que el año y el titular del copyright sean correctos.
+- **`.env.example`**: Ajustá las variables de entorno si tu proyecto requiere servicios adicionales.
+
+### 2.2. 📋 Definición de Especificaciones (`specs.md`)
+
+Te recomendamos crear un archivo `specs.md` en la raíz del proyecto. Este documento será tu fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
 
 **Contenido sugerido para `specs.md`:**
-- Objetivos del negocio.
-- Reglas de validación y lógica específica.
-- Integraciones de terceros requeridas.
-- Decisiones técnicas que desvíen del stack estándar.
+- 🎯 Objetivos del negocio
+- ✅ Reglas de validación y lógica específica
+- 🔌 Integraciones de terceros requeridas
+- ⚙️ Decisiones técnicas que desvíen del stack estándar
 
-## 3. Flujo de Trabajo Recomendado
+## 3. 🔄 Flujo de Trabajo Recomendado
 
 Para mantener la integridad del código y la eficiencia en el desarrollo:
 
-1.  **Análisis**: Lea `stack.md` (arquitectura base) y `specs.md` (requisitos del proyecto).
-2.  **Configuración**: Copie `.env.example` a `.env` y ajuste las credenciales locales.
-3.  **Desarrollo**: Utilice ramas temáticas (`feature/nombre-funcionalidad`) para cada nueva capacidad.
-4.  **Validación**: Ejecute `make test` o los scripts de testing definidos antes de cada commit.
-5.  **Despliegue**: Utilice los contenedores Docker configurados para simular el entorno de producción localmente.
+1. **📖 Análisis**: Leé `stack.md` (arquitectura base) y `specs.md` (requisitos del proyecto).
+2. **⚙️ Configuración**: Copiá `.env.example` a `.env` y ajustá las credenciales locales.
+3. **💻 Desarrollo**: Usá ramas temáticas (`feature/nombre-funcionalidad`) para cada nueva capacidad.
+4. **✅ Validación**: Ejecutá `make test` o los scripts de testing definidos antes de cada commit.
+5. **🚀 Despliegue**: Usá los contenedores Docker configurados para simular el entorno de producción localmente.
 
-## 4. Mantenimiento y Actualizaciones
+## 4. 🛠️ Mantenimiento y Actualizaciones
 
-Si la Plantilla Maestra recibe actualizaciones críticas (parches de seguridad, mejoras de rendimiento), es posible integrarlas en el proyecto derivado.
+Si la Plantilla Maestra recibe actualizaciones críticas (parches de seguridad, mejoras de rendimiento), podés integrarlas en tu proyecto derivado.
 
 **Procedimiento de sincronización:**
+
 ```bash
 # Agregar la plantilla como un repositorio remoto llamado 'upstream'
 git remote add upstream <URL_DEL_REPOSITORIO_PLANTILLA>
@@ -81,21 +87,22 @@ git fetch upstream
 # Intentar fusionar los cambios (puede requerir resolución de conflictos)
 git merge upstream/main --allow-unrelated-histories
 ```
-*Nota: Resuelva los conflictos priorizando la lógica de negocio específica de su proyecto sobre las configuraciones genéricas de la plantilla.*
 
-## 5. Checklist de Verificación Pre-Inicio
+> **💡 Tip**: Resolvé los conflictos priorizando la lógica de negocio específica de tu proyecto sobre las configuraciones genéricas de la plantilla.
 
-Asegúrese de completar esta lista antes de iniciar el desarrollo activo:
+## 5. ✅ Checklist de Verificación Pre-Inicio
 
-- [ ] Historial de Git original eliminado y nuevo repositorio inicializado.
-- [ ] Repositorio remoto configurado correctamente.
-- [ ] Archivo `specs.md` creado con los requisitos del proyecto.
-- [ ] Metadatos en `README`, `package.json` y `pyproject.toml` actualizados.
-- [ ] Archivo `.env` generado y configurado con valores locales.
-- [ ] Contenedores Docker iniciados correctamente (`make dev` o `docker-compose up`).
-- [ ] Tests básicos ejecutados sin errores.
+Completá esta lista antes de iniciar el desarrollo activo:
 
-## 6. Referencias Técnicas
+- [ ] Historial de Git original eliminado y nuevo repositorio inicializado
+- [ ] Repositorio remoto configurado correctamente
+- [ ] Archivo `specs.md` creado con los requisitos del proyecto
+- [ ] Metadatos en `README`, `package.json` y `pyproject.toml` actualizados
+- [ ] Archivo `.env` generado y configurado con valores locales
+- [ ] Contenedores Docker iniciados correctamente (`make dev` o `docker-compose up`)
+- [ ] Tests básicos ejecutados sin errores
+
+## 6. 📚 Referencias Técnicas
 
 - **`stack.md`**: Especificación técnica detallada de la arquitectura, dependencias y estructura de directorios.
 - **`README.md`**: Documentación pública del proyecto, instrucciones de instalación y uso.
