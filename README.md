@@ -100,6 +100,7 @@ make type-check       # Type checking
 
 # Producción
 make build            # Construir contenedores
+make backup-db        # Backup de SQLite con timestamp
 make clean            # Limpieza profunda
 ```
 
@@ -118,9 +119,10 @@ cp .env.example .env
 ```
 
 Principales variables:
-- `SECRET_KEY` - Clave secreta para JWT (cambiar en producción)
+- `SECRET_KEY` - Clave secreta para JWT (dejar vacío para generación automática)
 - `DATABASE_URL` - URL de conexión a SQLite
-- `BACKEND_CORS_ORIGINS` - Orígenes permitidos para CORS
+- `BACKEND_CORS_ORIGINS_RAW` - Orígenes permitidos para CORS (formato JSON)
+- `DISABLE_DOCS` - Deshabilitar `/docs`, `/redoc` y `/openapi.json` en producción (default: `False`)
 
 ### Base de Datos
 

@@ -25,13 +25,18 @@ async def lifespan(app: FastAPI):
         FastAPIInstrumentor.uninstrument_app(app)
 
 
+# Configurar URLs de docs según flag de producción
+docs_config = {} if settings.DISABLE_DOCS else {
+    "docs_url": "/docs",
+    "redoc_url": "/redoc",
+    "openapi_url": f"{settings.API_V1_STR}/openapi.json"
+}
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
-    openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan,
-    docs_url="/docs",  # Swagger UI
-    redoc_url="/redoc",  # ReDoc
+    **docs_config
 )
 
 # CORS
