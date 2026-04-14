@@ -1,4 +1,4 @@
-.PHONY: install-dev run-dev build test lint clean type-check security-check format reset
+.PHONY: install-dev run-dev build test lint clean type-check security-check format reset backup-db migrate seed
 
 # Instalación de dependencias con uv (10-100x más rápido)
 install-dev:
@@ -45,6 +45,20 @@ security-check:
 format:
 	cd backend && ruff format .
 	cd frontend && npx @biomejs/biome format --write .
+
+# Migraciones de base de datos con Alembic
+migrate:
+	cd backend && alembic upgrade head
+
+# Seed de datos iniciales
+seed:
+	cd backend && python -c "from app.db.base import seed_db; import asyncio; asyncio.run(seed_db())"
+
+# Backup de base de datos SQLite con timestamp
+backup-db:
+	@mkdir -p backups
+	@cp backend/app.db backups/app.db.$$(date +%Y%m%d_%H%M%S) 2>/dev/null || echo "SQLite DB not found, skipping backup"
+	@echo "Backup created in backups/"
 
 # Limpieza profunda
 clean:

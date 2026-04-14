@@ -13,6 +13,7 @@ services:
     environment:
       SQLITE_DB_PATH: /app/data/app.db
       DATABASE_URL: sqlite+aiosqlite:////app/data/app.db
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4317
     ports:
       - "${BACKEND_PORT:-8000}:8000"
     volumes:
@@ -25,6 +26,8 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    depends_on:
+      - jaeger
 
   # Frontend: Preact + Vite
   frontend:
@@ -44,8 +47,20 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    command: >
-      sh -c "npm run dev -- --host 0.0.0.0"
+
+  # Jaeger: OpenTelemetry tracing (solo desarrollo)
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: boilerplate_jaeger
+    restart: unless-stopped
+    ports:
+      - "16686:16686"  # UI
+      - "4317:4317"    # OTLP gRPC
+      - "4318:4318"    # OTLP HTTP
+    environment:
+      COLLECTOR_OTLP_ENABLED: "true"
+    profiles:
+      - monitoring
 
 volumes:
   sqlite_data:
