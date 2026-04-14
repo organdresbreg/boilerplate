@@ -1,65 +1,57 @@
-```markdown
-# Compiled and build artifacts
-*.pyc
+```
+# Dependencies
+.backend/
+.frontend/
 __pycache__/
-*.o
-*.obj
+*.pyc
+*.pyo
+*.pyd
+node_modules/
+venv/
+.venv/
+.env
+.env.local
+.env.*
+
+# Build artifacts
 dist/
 build/
 target/
 
-# Dependencies
-.venv/
-venv/
-node_modules/
-.mypy_cache/
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
+install_manifest.txt
+setup.cfg
 .pytest_cache/
-.gradle/
+.coverage
+htmlcov/
 
-# Logs and temp files
+# Logs
 *.log
-*.tmp
-*.swp
 
-# Environment
-.env
-.env.local
-*.env.*
-
-# Editors
-.vscode/
-.idea/
-
-# System files
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Coverage
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+
+# Coverage reports
 coverage/
 htmlcov/
-.coverage
 
-# Compressed files
-*.zip
-*.gz
-*.tar
-*.tgz
-*.bz2
-*.xz
-*.7z
-*.rar
-*.zst
-*.lz4
-*.lzh
-*.cab
-*.arj
-*.rpm
-*.deb
-*.Z
-*.lz
-*.lzo
-*.tar.gz
-*.tar.bz2
-*.tar.xz
-*.tar.zst
+# MyPy cache
+.mypy_cache/
 ```
