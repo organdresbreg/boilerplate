@@ -52,7 +52,7 @@
 | Componente | Versión | Justificación |
 |------------|---------|---------------|
 | **Librería UI** | Preact 11.0+ | Signals nativos, 2.8KB, compatibilidad total React 19 |
-| **Build Tool** | Vite 6.0+ | Rolldown nativo (Rust), HMR instantáneo, build 5x más rápido |
+| **Build Tool** | Vite 5.0+ | HMR instantáneo, build optimizado, ES2025 |
 | **Lenguaje** | TypeScript 5.0+ | Inferencia mejorada, módulos ES2025, decorators stage 3 |
 | **Estado** | Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
 | **HTTP Client** | TanStack Query 5.5+ | Offline-first, persistencia automática, optimistic updates |
@@ -234,7 +234,7 @@ async def root():
 ## 🎨 Configuración del Frontend (Preact + Vite)
 
 ### `frontend/vite.config.ts`
-Optimizado para Vite 6 con Rolldown, alias y proxy de API.
+Optimizado para Vite 5, alias y proxy de API.
 
 ```typescript
 import { defineConfig } from 'vite'

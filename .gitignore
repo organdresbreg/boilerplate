@@ -1,16 +1,5 @@
-```
-# Dependencies
-node_modules/
-
-# Logs and temp files
-*.log
-*.tmp
-
-# Environment
-.env
-.env.local
-.env.*
-
-# Editors
-.vscode/
+```markdown
+# No build artifacts, dependencies, or temporary files detected in changes
+# Only documentation files (README.md, stack.md) were modified
+# No .gitignore rules needed
 ```
