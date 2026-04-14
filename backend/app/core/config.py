@@ -48,9 +48,6 @@ class Settings(BaseSettings):
     # CORS - Parseado dinámicamente desde ENV
     BACKEND_CORS_ORIGINS_RAW: str = '["http://localhost:5173"]'
     
-    # Feature flags para 2026
-    ENABLE_HTTP3: bool = False
-    
     # Producción: deshabilitar docs y openapi
     DISABLE_DOCS: bool = False
     
