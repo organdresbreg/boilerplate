@@ -1,12 +1,12 @@
 # 🚀 Modern Full-Stack Boilerplate 2026
 
-[![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
-[![FastAPI 0.115+](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
-[![Preact 11+](https://img.shields.io/badge/Preact-11+-black.svg)](https://preactjs.com/)
-[![Vite 5+](https://img.shields.io/badge/Vite-5+-purple.svg)](https://vitejs.dev/)
+[![Python 3.13.2](https://img.shields.io/badge/python-3.13.2-blue.svg)](https://www.python.org/downloads/)
+[![FastAPI 0.122.0](https://img.shields.io/badge/FastAPI-0.122.0-green.svg)](https://fastapi.tiangolo.com/)
+[![Preact 10.26.2](https://img.shields.io/badge/Preact-10.26.2-black.svg)](https://preactjs.com/)
+[![Vite 8.0.4](https://img.shields.io/badge/Vite-8.0.4-purple.svg)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI**, **Pydantic v2**, **SQLite**, **Preact** y **Vite**.
+Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI 0.122**, **Pydantic 2.11**, **SQLite**, **Preact 10** y **Vite 8**.
 
 ## ⚡ Quick Start
 
@@ -31,7 +31,7 @@ make run-dev
 |----------------|-----------|
 | **Type-Safety End-to-End** | Tipado estático desde la BD hasta el componente UI |
 | **Bundle < 30KB** | Performance first, carga instantánea |
-| **Hot Reload Instantáneo** | DX optimizado con Vite 5 y Uvicorn |
+| **Hot Reload Instantáneo** | DX optimizado con Vite 8 y Uvicorn |
 | **Zero-Config** | Configuraciones optimizadas por defecto. Sin tiempo perdido en setup. |
 | **Edge-Ready** | Preparado para despliegue en edge computing |
 | **Minimalista** | Solo dependencias estrictamente necesarias. Cada librería debe justificar su existencia. |
@@ -40,23 +40,26 @@ make run-dev
 ## 🛠️ Stack Tecnológico
 
 ### Backend
-- **Python 3.13+** - Últimas features y mejor rendimiento
-- **FastAPI 0.115+** - Framework moderno y rápido
-- **Pydantic v2** - Validación ultrarrápida
-- **SQLModel** - ORM type-safe con SQLAlchemy 2.0
-- **SQLite (WAL)** - Serverless, ACID compliant
-- **uv** - Package manager 10-100x más rápido
+- **Python 3.13.2** - JIT experimental, mejoras en GC y rendimiento
+- **FastAPI 0.122.0** - Framework moderno y rápido, integrado con Pydantic 2.11
+- **Pydantic 2.11.0** - Validación ultrarrápida con núcleo en Rust
+- **pydantic-settings 2.8.1** - Gestión de variables de entorno tipadas
+- **SQLModel 0.0.24** - ORM type-safe con SQLAlchemy 2.0.38
+- **SQLite (WAL) - Ideal para desarrollo modular** - Serverless, ACID compliant
+- **uv** - Package manager 10-100x más rápido que pip
+- **bcrypt 4.2.1** - Hashing seguro y moderno
 
 ### Frontend
-- **Preact 11+** - 2.8KB, compatible con React 19
-- **Vite 5+** - Build tool rápido y maduro
-- **TypeScript 5.0+** - Inferencia mejorada
-- **TanStack Query 5.5+** - Offline-first, optimistic updates
+- **Preact 10.26.2** - ~3KB, compatible con React, misma API
+- **Vite 8.0.4** - Build tool rápido y maduro, HMR instantáneo
+- **TypeScript 5.7.3** - Inferencia mejorada
+- **TanStack Query 5.66.0** - Offline-first, optimistic updates, caché inteligente
+- **Preact Router 4.1.2** - Lazy loading nativo, transiciones integradas
 
 ### DevOps
 - **Docker + Compose** - Contenedores multi-stage optimizados
-- **Ruff** - Linting y formateo ultrarrápidos (Python)
-- **Pytest + Vitest** - Testing integrado backend/frontend
+- **Ruff 0.9.4** - Linting y formateo ultrarrápidos (Python), unificado
+- **Pytest 8.3.4 + pytest-asyncio 0.25.3 (Backend), Vitest 3.0.5 (Frontend)** - Testing integrado backend/frontend
 - **GitHub Actions** - CI/CD con deploy preview
 
 ## 📂 Estructura del Proyecto
