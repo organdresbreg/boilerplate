@@ -24,9 +24,9 @@
 
 ## 🧠 Filosofía y Principios
 
-- **Minimalismo Funcional:** Solo dependencias estrictamente necesarias.
+- **Minimalismo Funcional:** Solo dependencias estrictamente necesarias. Cada librería debe justificar su existencia reduciendo complejidad o mejorando performance.
 - **Type-Safety End-to-End:** Tipado estático desde la BD hasta el componente UI.
-- **Zero-Config Experience:** Configuraciones optimizadas por defecto.
+- **Zero-Config Experience:** Configuraciones optimizadas por defecto. El desarrollador no debería perder tiempo configurando herramientas; todo funciona out-of-the-box.
 - **Performance First:** Bundle size < 30KB (gzipped), TTFB < 50ms local.
 - **Developer Experience (DX):** Hot reload instantáneo, linting automático, testing integrado.
 - **Edge-Ready:** Arquitectura preparada para despliegue en edge computing.
@@ -327,6 +327,152 @@ export function App() {
 ---
 
 ## 💾 Base de Datos (SQLite + SQLModel)
+
+> **Nota sobre SQLite en Desarrollo:** La elección de SQLite no es una limitación, es una **decisión estratégica** para desarrollo modular. SQLite ofrece cero configuración, portabilidad total (archivo único), y es ideal para módulos independientes que pueden ejecutarse de forma aislada. Para producción con alta concurrencia o grandes volúmenes, el stack está diseñado para escalar a PostgreSQL cambiando únicamente la variable de entorno `DATABASE_URL`.
+
+### Estrategia de Escalado: SQLite → PostgreSQL
+
+Este boilerplate sigue el principio **"Develop Simple, Deploy Scalable"**:
+
+| Entorno | Base de Datos | Justificación |
+|---------|--------------|---------------|
+| **Desarrollo** | SQLite (WAL + strict tables) | Cero configuración, portable, rápido para pruebas unitarias |
+| **Producción (MVP)** | SQLite | Adecuado para < 100K req/día, edge computing, módulos aislados |
+| **Producción (Escalado)** | PostgreSQL 16+ | Alta concurrencia, escrituras paralelas, replicación, particionamiento |
+
+#### Cómo escalar a PostgreSQL
+
+Solo necesitas cambiar la variable de entorno `DATABASE_URL` en tu `.env` o gestor de secretos:
+
+```bash
+# Desarrollo (default)
+DATABASE_URL="sqlite+aiosqlite:///./app.db"
+
+# Producción (PostgreSQL)
+DATABASE_URL="postgresql+asyncpg://user:password@localhost:5432/mydb"
+```
+
+No hay cambios en el código. SQLModel + SQLAlchemy 2.0 abstraen el dialecto de base de datos automáticamente.
+
+### Guía de Migración: SQLite → PostgreSQL
+
+#### ¿Cuándo considerar el cambio?
+
+- ✅ **Permanecer en SQLite si:** 
+  - Módulo independiente con < 100K operaciones diarias
+  - Arquitectura edge/serverless
+  - Prototipo o MVP temprano
+  - Lecturas predominantes (>90%)
+
+- 🔄 **Migrar a PostgreSQL si:**
+  - Concurrencia alta (>50 escrituras simultáneas)
+  - Necesitas replicación o high-availability
+  - Volúmenes > 10GB de datos
+  - Requeres características avanzadas (full-text search complejo, JSONB avanzado, geolocalización)
+
+#### Pasos para ejecutar la migración
+
+1. **Exportar datos desde SQLite:**
+```bash
+cd backend
+python -c "
+import sqlite3
+import json
+from app.db.session import engine
+from sqlmodel import SQLModel
+
+conn = sqlite3.connect('app.db')
+cursor = conn.cursor()
+
+# Exportar tablas a JSON
+tables = ['users', 'your_tables']
+for table in tables:
+    cursor.execute(f'SELECT * FROM {table}')
+    columns = [desc[0] for desc in cursor.description]
+    rows = [dict(zip(columns, row)) for row in cursor.fetchall()]
+    with open(f'{table}.json', 'w') as f:
+        json.dump(rows, f, indent=2, default=str)
+"
+```
+
+2. **Configurar PostgreSQL en docker-compose.yml:**
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+```
+
+3. **Actualizar DATABASE_URL en .env:**
+```bash
+DATABASE_URL="postgresql+asyncpg://user:password@db:5432/mydb"
+```
+
+4. **Ejecutar migraciones con Alembic:**
+```bash
+cd backend
+alembic upgrade head
+```
+
+5. **Importar datos (opcional):**
+```bash
+python scripts/import_from_sqlite.py
+```
+
+#### Configuración recomendada para PostgreSQL en producción
+
+```python
+# backend/app/core/config.py
+DATABASE_URL: str = "postgresql+asyncpg://user:password@host:5432/dbname"
+
+# Pool de conexiones optimizado
+engine = create_async_engine(
+    settings.DATABASE_URL,
+    echo=False,
+    pool_size=20,           # Ajustar según carga esperada
+    max_overflow=40,        # Conexiones temporales adicionales
+    pool_pre_ping=True,     # Verificar conexión antes de usar
+    pool_recycle=3600,      # Reciclar conexiones cada hora
+)
+```
+
+**docker-compose.prod.yml:**
+```yaml
+services:
+  db:
+    image: postgres:16-alpine
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    command: >
+      postgres
+      -c max_connections=200
+      -c shared_buffers=256MB
+      -c effective_cache_size=768MB
+      -c work_mem=16MB
+      -c checkpoint_timeout=10min
+      -c wal_level=replica
+```
+
+---
 
 ### `backend/app/db/base.py`
 Inicialización asíncrona con SQLite modo estricto y WAL.
@@ -644,15 +790,34 @@ alembic upgrade head
 
 Antes de desplegar, verificar:
 
-- [ ] **Secrets:** `.env` no commiteado, variables sensibles en gestor de secretos.
+### Configuración General
+- [ ] **Secrets:** `.env` no commiteado, variables sensibles en gestor de secretos (AWS Secrets Manager, HashiCorp Vault, etc.).
 - [ ] **Debug:** `DEBUG=False`, `PYDEVD_DISABLE_FILE_VALIDATION=1`.
-- [ ] **Logs:** Nivel de log cambiado a `WARNING` o `ERROR`.
-- [ ] **DB:** Backup strategy definida para SQLite (cron job o volume snapshot).
-- [ ] **Frontend:** Source maps deshabilitados, console.logs eliminados.
-- [ ] **Security:** Headers de seguridad (HSTS, CSP) configurados en Nginx.
-- [ ] **HTTPS:** Certificado SSL válido (Let's Encrypt).
-- [ ] **Monitor:** Health checks activos (`/health`).
-- [ ] **Tests:** Suite de tests pasando al 100%.
+- [ ] **Logs:** Nivel de log cambiado a `WARNING` o `ERROR`. Logs estructurados en formato JSON habilitados.
+- [ ] **HTTPS:** Certificado SSL válido (Let's Encrypt o proveedor comercial). HSTS habilitado.
+
+### Base de Datos
+- [ ] **SQLite (MVP/Edge):** Backup strategy definida (cron job con `sqlite3 .backup` o volume snapshot). WAL mode verificado.
+- [ ] **PostgreSQL (Escalado):** 
+  - Pool de conexiones configurado (`pool_size`, `max_overflow`)
+  - Backups automáticos programados (pg_dump diario + WAL archiving)
+  - Monitoreo de conexiones activas y slow queries
+  - Índices analizados con `EXPLAIN ANALYZE`
+- [ ] **Migraciones:** Alembic migrations aplicadas y verificadas en staging.
+
+### Frontend
+- [ ] **Build:** Source maps deshabilitados, console.logs eliminados.
+- [ ] **Cache:** Headers de cache configurados para assets estáticos (inmutable por 1 año).
+- [ ] **Security:** CSP (Content Security Policy) configurado según necesidades.
+
+### Monitorización
+- [ ] **Health Checks:** Endpoints `/health` activos y monitoreados.
+- [ ] **Alertas:** Configurar alertas para errores 5xx, latencia > 500ms, uso de DB > 80%.
+- [ ] **Tests:** Suite de tests pasando al 100% con coverage > 80%.
+
+### Performance
+- [ ] **Backend:** Response time p95 < 200ms para endpoints críticos.
+- [ ] **Frontend:** Bundle size < 30KB (gzipped), Lighthouse score > 90.
 
 ---
 

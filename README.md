@@ -32,9 +32,10 @@ make run-dev
 | **Type-Safety End-to-End** | Tipado estático desde la BD hasta el componente UI |
 | **Bundle < 30KB** | Performance first, carga instantánea |
 | **Hot Reload Instantáneo** | DX optimizado con Vite 5 y Uvicorn |
-| **Zero-Config** | Configuraciones optimizadas por defecto |
+| **Zero-Config** | Configuraciones optimizadas por defecto. Sin tiempo perdido en setup. |
 | **Edge-Ready** | Preparado para despliegue en edge computing |
-| **Minimalista** | Solo dependencias estrictamente necesarias |
+| **Minimalista** | Solo dependencias estrictamente necesarias. Cada librería debe justificar su existencia. |
+| **SQLite → PostgreSQL** | Desarrollo simple (SQLite), producción escalable (PostgreSQL). Cambia solo `DATABASE_URL`. |
 
 ## 🛠️ Stack Tecnológico
 
@@ -123,9 +124,13 @@ cp .env.example .env
 
 Principales variables:
 - `SECRET_KEY` - Clave secreta para JWT (dejar vacío para generación automática)
-- `DATABASE_URL` - URL de conexión a SQLite
+- `DATABASE_URL` - URL de conexión a la base de datos. **SQLite por defecto** (desarrollo), configurable a **PostgreSQL** para producción.
+  - Desarrollo: `sqlite+aiosqlite:///./app.db`
+  - Producción: `postgresql+asyncpg://user:password@host:5432/dbname`
 - `BACKEND_CORS_ORIGINS_RAW` - Orígenes permitidos para CORS (formato JSON o comma-separated)
 - `DISABLE_DOCS` - Deshabilitar `/docs`, `/redoc` y `/openapi.json` en producción (default: `False`)
+
+> **💡 Nota sobre SQLite:** La elección de SQLite es estratégica para desarrollo modular: cero configuración, portable y ideal para módulos independientes. El stack está diseñado para escalar a PostgreSQL en producción simplemente cambiando `DATABASE_URL`, sin modificar código. Ver [stack.md](./stack.md) para guía completa de migración.
 
 ### Base de Datos
 
@@ -178,12 +183,19 @@ docker compose -f docker-compose.prod.yml up
 
 Antes de desplegar:
 
-- [ ] Secrets en gestor seguro (no en `.env`)
-- [ ] `DEBUG=False` y logs en nivel `WARNING`
-- [ ] Backup strategy para SQLite definida
-- [ ] HTTPS con certificado válido
-- [ ] Source maps deshabilitados en frontend
-- [ ] Tests pasando al 100%
+### Configuración General
+- [ ] **Secrets:** Variables sensibles en gestor seguro (AWS Secrets Manager, HashiCorp Vault, etc.)
+- [ ] **Debug:** `DEBUG=False` y logs en nivel `WARNING`
+- [ ] **HTTPS:** Certificado SSL válido configurado
+
+### Base de Datos
+- [ ] **SQLite (MVP/Edge):** Backup strategy definida (cron job o volume snapshot)
+- [ ] **PostgreSQL (Escalado):** Pool de conexiones configurado, backups automáticos programados
+- [ ] **Migraciones:** Alembic migrations aplicadas y verificadas
+
+### Frontend & Testing
+- [ ] **Build:** Source maps deshabilitados en frontend
+- [ ] **Tests:** Suite de tests pasando al 100%
 
 ## 🤝 Contribución
 
