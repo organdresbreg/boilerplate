@@ -50,7 +50,6 @@ class Settings(BaseSettings):
     
     # Feature flags para 2026
     ENABLE_HTTP3: bool = False
-    ENABLE_OTEL: bool = False
     
     # Producción: deshabilitar docs y openapi
     DISABLE_DOCS: bool = False

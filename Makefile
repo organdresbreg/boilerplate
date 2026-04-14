@@ -1,9 +1,12 @@
-.PHONY: install-dev run-dev build test lint clean type-check security-check format reset backup-db migrate seed
+.PHONY: install-dev run-dev build test lint clean type-check security-check format reset backup-db migrate seed dev
 
 # Instalación de dependencias con uv (10-100x más rápido)
 install-dev:
 	cd backend && uv pip install -e . -r requirements.txt
 	cd frontend && npm install
+
+# Setup inicial completo: install deps, migrate db, run dev
+dev: install-dev migrate run-dev
 
 # Ejecutar en desarrollo con Docker Compose
 run-dev:
