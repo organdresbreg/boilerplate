@@ -1,7 +1,7 @@
 # 🚀 Modern Full-Stack Boilerplate Specification (2026 Edition)
 ## FastAPI + Pydantic v2 + SQLite + Preact + Vite
 
-**Versión:** 2.0.0  
+**Versión:** 2.1.0  
 **Última actualización:** Abril 2026  
 **Objetivo:** Proporcionar una base profesional, ligera, tipada y escalable para aplicaciones web modernas con mínimos recursos, siguiendo los estándares de 2026.
 
@@ -39,31 +39,34 @@
 ### Backend
 | Componente | Versión | Justificación |
 |------------|---------|---------------|
-| **Lenguaje** | Python 3.13+ | Pattern matching avanzado, mejor rendimiento, typing reforzado |
+| **Lenguaje** | Python 3.13.2 | JIT experimental, mejoras en GC, typing reforzado |
 | **Package Manager** | uv 0.6+ | 10-100x más rápido que pip, gestión unificada de proyectos |
-| **Framework Web** | FastAPI 0.115+ | Soporte nativo para Python 3.13, OpenAPI 3.1, streaming mejorado |
-| **Validación** | Pydantic v2 | Validación rápida, integración completa con typing |
-| **ORM** | SQLModel 0.0.22+ | Estable, combinación perfecta SQLAlchemy 2.0 + Pydantic v2 |
-| **DB** | SQLite 3.45+ (WAL + strict tables) | Serverless, ACID compliant, modo estricto para integridad |
-| **Migrations** | Alembic 1.14+ | Soporte completo para async, autogeneración mejorada |
-| **Server** | Uvicorn 0.30+ (Worker: Gunicorn 22+) | ASGI maduro, soporte HTTP/3 experimental |
+| **Framework Web** | FastAPI 0.122.0 | Integración nativa optimizada para Pydantic 2.11+, Python 3.13 |
+| **Validación** | Pydantic 2.11.0 | Validador de alto rendimiento, núcleo en Rust |
+| **Config** | pydantic-settings 2.8.1 | Gestión de variables de entorno para Pydantic v2 |
+| **ORM** | SQLModel 0.0.24 | Compatible con SQLAlchemy 2.0.38+, unifica schemas y modelos |
+| **DB Driver** | SQLAlchemy 2.0.38 + aiosqlite 0.21.0 | Base asíncrona robusta, driver SQLite async |
+| **Migrations** | Alembic 1.14.1 | Soporte completo para async, autogeneración mejorada |
+| **Server** | Uvicorn 0.35.2 | Soporte Python 3.13, uvloop actualizado |
+| **Security** | bcrypt 4.2.1 + python-jose 3.4.0 | Hashing moderno, JWT estándar |
 
 ### Frontend
 | Componente | Versión | Justificación |
 |------------|---------|---------------|
-| **Librería UI** | Preact 11.0+ | Signals nativos, 2.8KB, compatibilidad total React 19 |
-| **Build Tool** | Vite 5.0+ | HMR instantáneo, build optimizado, ES2025 |
-| **Lenguaje** | TypeScript 5.0+ | Inferencia mejorada, módulos ES2025, decorators stage 3 |
-| **Estado** | Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
-| **HTTP Client** | TanStack Query 5.5+ | Offline-first, persistencia automática, optimistic updates |
-| **Estilos** | TailwindCSS 4.0+ (Opcional) | Motor Oxide (Rust), zero-config, CSS nativo cuando es posible |
-| **Router** | Preact Router 7.0+ | Lazy loading nativo, transiciones integradas |
-| **Forms** | Preact Hook Form 2.0+ | Validación performante, menos re-renders |
+| **Librería UI** | Preact 10.26.2 | Alternativa ligera a React (~3KB), misma API |
+| **Build Tool** | Vite 8.0.4 | Motor de compilación estable, HMR instantáneo |
+| **Lenguaje** | TypeScript 5.7.3 | Inferencia mejorada, tipado estricto |
+| **HTTP Client** | TanStack Query 5.66.0 | Offline-first, caché inteligente, optimistic updates |
+| **Router** | Preact Router 4.1.2 | Lazy loading nativo, transiciones integradas |
+| **Preset** | @preact/preset-vite 5.0.0 | Adaptador oficial para Vite 8 |
 
 ### DevOps & Calidad
 - **Contenedores:** Docker + Docker Compose v3 (Multi-stage builds optimizados)
-- **Linting:** Ruff 0.9+ (Python)
-- **Testing:** Pytest 8.5+ + pytest-asyncio (Backend), Vitest 3.0+ (Frontend)
+- **Linting:** Ruff 0.9.4 (Python) - Linter y formateador unificado
+- **Testing Backend:** Pytest 8.3.4 + pytest-asyncio 0.25.3 + pytest-cov 6.0.0
+- **Testing Frontend:** Vitest 3.0.5 (Entorno nativo para Vite)
+- **HTTP Client Tests:** httpx 0.28.1 (Cliente HTTP asíncrono para FastAPI)
+- **Security Audit:** pip-audit 2.8.2 (Análisis de vulnerabilidades)
 - **CI/CD:** GitHub Actions 2026 + Deploy preview automático
 - **Logs:** Logs estructurados JSON integrados
 
@@ -226,7 +229,7 @@ async def root():
 ## 🎨 Configuración del Frontend (Preact + Vite)
 
 ### `frontend/vite.config.ts`
-Optimizado para Vite 5, alias y proxy de API.
+Optimizado para Vite 8, alias y proxy de API.
 
 ```typescript
 import { defineConfig } from 'vite'
@@ -303,7 +306,7 @@ render(
 ```
 
 ### `frontend/src/App.tsx`
-Ejemplo con Preact Router 7 y Signals.
+Ejemplo con Preact Router 4.1.2 y Signals.
 
 ```tsx
 import { Router, Route } from 'preact-router'

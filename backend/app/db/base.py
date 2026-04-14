@@ -30,9 +30,7 @@ async def seed_db():
     """Precargar datos de ejemplo en la base de datos"""
     from sqlmodel import select
     from app.models.user import User
-    from passlib.context import CryptContext
-    
-    pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+    import bcrypt
     
     async with async_session_maker() as session:
         # Verificar si ya existen usuarios
@@ -48,7 +46,7 @@ async def seed_db():
             email="admin@example.com",
             full_name="Admin User",
             is_active=True,
-            hashed_password=pwd_context.hash("admin123"),
+            hashed_password=bcrypt.hashpw("admin123".encode('utf-8'), bcrypt.gensalt()).decode('utf-8'),
         )
         
         session.add(admin_user)
