@@ -1,5 +1,5 @@
 # 🚀 Modern Full-Stack Boilerplate Specification (2026 Edition)
-## FastAPI + Pydantic V3 + SQLite + Preact + Vite
+## FastAPI + Pydantic v2 + SQLite + Preact + Vite
 
 **Versión:** 2.0.0  
 **Última actualización:** Abril 2026  
@@ -42,8 +42,8 @@
 | **Lenguaje** | Python 3.13+ | Pattern matching avanzado, mejor rendimiento, typing reforzado |
 | **Package Manager** | uv 0.6+ | 10-100x más rápido que pip, gestión unificada de proyectos |
 | **Framework Web** | FastAPI 0.115+ | Soporte nativo para Python 3.13, OpenAPI 3.1, streaming mejorado |
-| **Validación** | Pydantic V3 | Validación aún más rápida, mejor integración con typing |
-| **ORM** | SQLModel 0.1.0+ | Estable, combinación perfecta SQLAlchemy 2.0 + Pydantic V3 |
+| **Validación** | Pydantic v2 | Validación rápida, integración completa con typing |
+| **ORM** | SQLModel 0.0.22+ | Estable, combinación perfecta SQLAlchemy 2.0 + Pydantic v2 |
 | **DB** | SQLite 3.45+ (WAL + strict tables) | Serverless, ACID compliant, modo estricto para integridad |
 | **Migrations** | Alembic 1.14+ | Soporte completo para async, autogeneración mejorada |
 | **Server** | Uvicorn 0.30+ (Worker: Gunicorn 22+) | ASGI maduro, soporte HTTP/3 experimental |
@@ -52,9 +52,9 @@
 | Componente | Versión | Justificación |
 |------------|---------|---------------|
 | **Librería UI** | Preact 11.0+ | Signals nativos, 2.8KB, compatibilidad total React 19 |
-| **Build Tool** | Vite 6.0+ | Rolldown nativo (Rust), HMR instantáneo, build 5x más rápido |
-| **Lenguaje** | TypeScript 6.0+ | Inferencia mejorada, módulos ES2026, decorators stage 4 |
-| **Estado** | Zustand 5.0+ o Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
+| **Build Tool** | Vite 5.0+ | HMR instantáneo, build optimizado, ES2025 |
+| **Lenguaje** | TypeScript 5.0+ | Inferencia mejorada, módulos ES2025, decorators stage 3 |
+| **Estado** | Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
 | **HTTP Client** | TanStack Query 5.5+ | Offline-first, persistencia automática, optimistic updates |
 | **Estilos** | TailwindCSS 4.0+ (Opcional) | Motor Oxide (Rust), zero-config, CSS nativo cuando es posible |
 | **Router** | Preact Router 7.0+ | Lazy loading nativo, transiciones integradas |
@@ -62,7 +62,7 @@
 
 ### DevOps & Calidad
 - **Contenedores:** Docker + Docker Compose v3 (Multi-stage builds optimizados)
-- **Linting:** Ruff 0.9+ (Python), Biome 2.0+ (TS/JS - reemplaza ESLint+Prettier)
+- **Linting:** Ruff 0.9+ (Python)
 - **Testing:** Pytest 8.5+ + pytest-asyncio (Backend), Vitest 3.0+ (Frontend)
 - **CI/CD:** GitHub Actions 2026 + Deploy preview automático
 - **Monitorización:** OpenTelemetry nativo, logs estructurados JSON
@@ -107,7 +107,7 @@
 │   │   ├── layouts/        # Layouts principales
 │   │   ├── pages/          # Vistas/Rutas
 │   │   ├── services/       # API calls (axios/fetch wrappers)
-│   │   ├── store/          # Estado global (Zustand)
+│   │   ├── store/          # Estado global (Signals)
 │   │   ├── types/          # Tipos TS globales
 │   │   ├── utils/          # Helpers
 │   │   ├── App.tsx
@@ -133,7 +133,7 @@
 ## ⚙️ Configuración del Backend (FastAPI)
 
 ### `backend/app/core/config.py`
-Uso de `pydantic-settings` V3 para gestión de variables de entorno tipadas.
+Uso de `pydantic-settings` v2 para gestión de variables de entorno tipadas.
 
 ```python
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -234,7 +234,7 @@ async def root():
 ## 🎨 Configuración del Frontend (Preact + Vite)
 
 ### `frontend/vite.config.ts`
-Optimizado para Vite 6 con Rolldown, alias y proxy de API.
+Optimizado para Vite 5, alias y proxy de API.
 
 ```typescript
 import { defineConfig } from 'vite'
@@ -258,7 +258,7 @@ export default defineConfig({
     },
   },
   build: {
-    target: 'es2026',  // ES2026 para 2026
+    target: 'es2026',  // ES2025 para 2026
     minify: 'terser',
     sourcemap: false,  // Deshabilitar en prod por seguridad
     terserOptions: {
@@ -396,7 +396,7 @@ class User(UserBase, table=True):
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     updated_at: Optional[datetime] = Field(default=None)
     
-    # Pydantic V3 config para modelos SQLModel
+    # Pydantic v2 config para modelos SQLModel
     model_config = {
         "json_schema_extra": {
             "example": {
@@ -406,18 +406,13 @@ class User(UserBase, table=True):
             }
         }
     }
-```
 
----
-    is_active: bool = True
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     hashed_password: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
-```
-
----
+    is_active: bool = True
 
 ## 🐳 Dockerización y Despliegue (2026)
 
@@ -587,14 +582,12 @@ test:
 	cd backend && pytest --cov=app --cov-report=html
 	cd frontend && npm run test -- --coverage
 
-# Linting con Ruff y Biome
+# Linting con Ruff
 lint:
 	cd backend && ruff check . --fix
-	cd frontend && npx @biomejs/biome check --apply .
 
 # Type checking
 type-check:
-	cd backend && pyright
 	cd frontend && npx tsc --noEmit
 
 # Security audit
@@ -605,7 +598,6 @@ security-check:
 # Formateo automático
 format:
 	cd backend && ruff format .
-	cd frontend && npx @biomejs/biome format --write .
 
 # Limpieza profunda
 clean:

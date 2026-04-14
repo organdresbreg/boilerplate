@@ -3,10 +3,10 @@
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI 0.115+](https://img.shields.io/badge/FastAPI-0.115+-green.svg)](https://fastapi.tiangolo.com/)
 [![Preact 11+](https://img.shields.io/badge/Preact-11+-black.svg)](https://preactjs.com/)
-[![Vite 6+](https://img.shields.io/badge/Vite-6+-purple.svg)](https://vitejs.dev/)
+[![Vite 5+](https://img.shields.io/badge/Vite-5+-purple.svg)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI**, **Pydantic V3**, **SQLite**, **Preact** y **Vite**.
+Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI**, **Pydantic v2**, **SQLite**, **Preact** y **Vite**.
 
 ## ⚡ Quick Start
 
@@ -31,7 +31,7 @@ make run-dev
 |----------------|-----------|
 | **Type-Safety End-to-End** | Tipado estático desde la BD hasta el componente UI |
 | **Bundle < 30KB** | Performance first, carga instantánea |
-| **Hot Reload Instantáneo** | DX optimizado con Vite 6 y Uvicorn |
+| **Hot Reload Instantáneo** | DX optimizado con Vite 5 y Uvicorn |
 | **Zero-Config** | Configuraciones optimizadas por defecto |
 | **Edge-Ready** | Preparado para despliegue en edge computing |
 | **Minimalista** | Solo dependencias estrictamente necesarias |
@@ -41,21 +41,20 @@ make run-dev
 ### Backend
 - **Python 3.13+** - Últimas features y mejor rendimiento
 - **FastAPI 0.115+** - Framework moderno y rápido
-- **Pydantic V3** - Validación ultrarrápida
+- **Pydantic v2** - Validación ultrarrápida
 - **SQLModel** - ORM type-safe con SQLAlchemy 2.0
 - **SQLite (WAL)** - Serverless, ACID compliant
 - **uv** - Package manager 10-100x más rápido
 
 ### Frontend
 - **Preact 11+** - 2.8KB, compatible con React 19
-- **Vite 6+** - Build tool con Rolldown nativo (Rust)
-- **TypeScript 6.0+** - Inferencia mejorada
+- **Vite 5+** - Build tool rápido y maduro
+- **TypeScript 5.0+** - Inferencia mejorada
 - **TanStack Query 5.5+** - Offline-first, optimistic updates
-- **Zustand 5.0+** - Estado minimalista sin re-renders
 
 ### DevOps
 - **Docker + Compose** - Contenedores multi-stage optimizados
-- **Ruff + Biome** - Linting y formateo ultrarrápidos
+- **Ruff** - Linting y formateo ultrarrápidos (Python)
 - **Pytest + Vitest** - Testing integrado backend/frontend
 - **GitHub Actions** - CI/CD con deploy preview
 
@@ -98,7 +97,7 @@ make seed             # Precargar datos de ejemplo (admin@example.com / admin123
 make backup-db        # Backup de SQLite con timestamp
 
 # Calidad
-make lint             # Ruff + Biome
+make lint             # Ruff (Python)
 make format           # Formateo automático
 make test             # Tests con coverage
 make type-check       # Type checking

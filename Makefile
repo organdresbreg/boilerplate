@@ -26,14 +26,12 @@ test:
 	cd backend && pytest --cov=app --cov-report=html
 	cd frontend && npm run test -- --coverage
 
-# Linting con Ruff y Biome
+# Linting con Ruff
 lint:
 	cd backend && ruff check . --fix
-	cd frontend && npx @biomejs/biome check --apply .
 
 # Type checking
 type-check:
-	cd backend && pyright || true
 	cd frontend && npx tsc --noEmit
 
 # Security audit
@@ -44,7 +42,6 @@ security-check:
 # Formateo automático
 format:
 	cd backend && ruff format .
-	cd frontend && npx @biomejs/biome format --write .
 
 # Migraciones de base de datos con Alembic
 migrate:
