@@ -166,8 +166,8 @@ class Settings(BaseSettings):
     # CORS - Configurar según dominio de producción
     BACKEND_CORS_ORIGINS: list[str] = ["http://localhost:5173"]
     
-    # Feature flags para 2026
-    ENABLE_HTTP3: bool = False
+    # Producción: deshabilitar docs y openapi
+    DISABLE_DOCS: bool = False
 
 @lru_cache
 def get_settings() -> Settings:
