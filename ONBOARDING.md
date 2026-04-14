@@ -1,10 +1,10 @@
 # 🚀 ONBOARDING - Guía de Implementación
 
-> **⚠️ Nota Importante**: Este repositorio es una **Plantilla Maestra (Boilerplate)**. No lo uses directamente como proyecto de producción sin antes seguir los pasos de inicialización.
+> ⚠️ Este repositorio es una **Plantilla Maestra (Boilerplate)**. No lo uses directamente como proyecto de producción sin antes seguir los pasos de inicialización.
 
 ## 1. 📦 Inicialización del Proyecto
 
-El primer paso es clonar esta plantilla y limpiar su historial para comenzar tu nuevo proyecto desde cero.
+Clonar esta plantilla y limpiar su historial para comenzar un nuevo proyecto desde cero.
 
 ### 1.1. Clonar y Limpiar Historial
 
@@ -30,7 +30,7 @@ git commit -m "feat: initial project setup based on master boilerplate"
 
 ### 1.2. 🔗 Configurar Repositorio Remoto
 
-Vinculá tu nuevo proyecto con su repositorio remoto en GitHub, GitLab o similar:
+Vincular el nuevo proyecto con su repositorio remoto en GitHub:
 
 ```bash
 git remote add origin <URL_DEL_NUEVO_REPOSITORIO>
@@ -44,7 +44,7 @@ Antes de empezar a desarrollar, adaptá los metadatos y la configuración base a
 
 ### 2.1. 📝 Actualización de Metadatos
 
-Revisá y editá estos archivos:
+Revisar y editar los siguientes archivos:
 
 - **`README.md`**: Actualizá título, descripción, badges y enlaces específicos de tu proyecto.
 - **`package.json`** (Frontend) y **`pyproject.toml`** (Backend): Modificá `name`, `version`, `description` y `author`.
@@ -53,13 +53,7 @@ Revisá y editá estos archivos:
 
 ### 2.2. 📋 Definición de Especificaciones (`specs.md`)
 
-Te recomendamos crear un archivo `specs.md` en la raíz del proyecto. Este documento será tu fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
-
-**Contenido sugerido para `specs.md`:**
-- 🎯 Objetivos del negocio
-- ✅ Reglas de validación y lógica específica
-- 🔌 Integraciones de terceros requeridas
-- ⚙️ Decisiones técnicas que desvíen del stack estándar
+Editar el archivo `specs.md` en la raíz del proyecto. Este documento será la fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
 
 ## 3. 🔄 Flujo de Trabajo Recomendado
 
@@ -96,7 +90,7 @@ Completá esta lista antes de iniciar el desarrollo activo:
 
 - [ ] Historial de Git original eliminado y nuevo repositorio inicializado
 - [ ] Repositorio remoto configurado correctamente
-- [ ] Archivo `specs.md` creado con los requisitos del proyecto
+- [ ] Archivo `specs.md` editado con los requisitos del proyecto
 - [ ] Metadatos en `README`, `package.json` y `pyproject.toml` actualizados
 - [ ] Archivo `.env` generado y configurado con valores locales
 - [ ] Contenedores Docker iniciados correctamente (`make dev` o `docker-compose up`)
@@ -106,8 +100,3 @@ Completá esta lista antes de iniciar el desarrollo activo:
 
 - **`stack.md`**: Especificación técnica detallada de la arquitectura, dependencias y estructura de directorios.
 - **`README.md`**: Documentación pública del proyecto, instrucciones de instalación y uso.
-- **`CONTRIBUTING.md`**: Normas y estándares de código para contribuciones futuras.
-
----
-
-*Versión del documento: 1.0 | Basado en Arquitectura Full-Stack Moderna (2026)* ✨
