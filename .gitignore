@@ -1,0 +1,54 @@
+```
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Build artifacts
+dist/
+build/
+target/
+*.egg-info/
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Python specific
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.sqlite3
+*.db
+
+# Coverage
+.coverage
+coverage/
+htmlcov/
+
+# Alembic
+alembic/versions/*.py
+
+# Frontend build
+frontend/dist/
+frontend/node_modules/
+
+# Backend build
+backend/__pycache__/
+backend/*.pyc
+```
