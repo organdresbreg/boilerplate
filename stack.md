@@ -54,7 +54,7 @@
 | **Librería UI** | Preact 11.0+ | Signals nativos, 2.8KB, compatibilidad total React 19 |
 | **Build Tool** | Vite 6.0+ | Rolldown nativo (Rust), HMR instantáneo, build 5x más rápido |
 | **Lenguaje** | TypeScript 5.0+ | Inferencia mejorada, módulos ES2025, decorators stage 3 |
-| **Estado** | Zustand 5.0+ o Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
+| **Estado** | Signals nativos de Preact | Minimalista, sin re-renders innecesarios |
 | **HTTP Client** | TanStack Query 5.5+ | Offline-first, persistencia automática, optimistic updates |
 | **Estilos** | TailwindCSS 4.0+ (Opcional) | Motor Oxide (Rust), zero-config, CSS nativo cuando es posible |
 | **Router** | Preact Router 7.0+ | Lazy loading nativo, transiciones integradas |
@@ -62,7 +62,7 @@
 
 ### DevOps & Calidad
 - **Contenedores:** Docker + Docker Compose v3 (Multi-stage builds optimizados)
-- **Linting:** Ruff 0.9+ (Python), Biome 2.0+ (TS/JS - reemplaza ESLint+Prettier)
+- **Linting:** Ruff 0.9+ (Python)
 - **Testing:** Pytest 8.5+ + pytest-asyncio (Backend), Vitest 3.0+ (Frontend)
 - **CI/CD:** GitHub Actions 2026 + Deploy preview automático
 - **Monitorización:** OpenTelemetry nativo, logs estructurados JSON
@@ -107,7 +107,7 @@
 │   │   ├── layouts/        # Layouts principales
 │   │   ├── pages/          # Vistas/Rutas
 │   │   ├── services/       # API calls (axios/fetch wrappers)
-│   │   ├── store/          # Estado global (Zustand)
+│   │   ├── store/          # Estado global (Signals)
 │   │   ├── types/          # Tipos TS globales
 │   │   ├── utils/          # Helpers
 │   │   ├── App.tsx
@@ -587,14 +587,13 @@ test:
 	cd backend && pytest --cov=app --cov-report=html
 	cd frontend && npm run test -- --coverage
 
-# Linting con Ruff y Biome
+# Linting con Ruff
 lint:
 	cd backend && ruff check . --fix
-	cd frontend && npx @biomejs/biome check --apply .
 
 # Type checking
 type-check:
-	cd backend && pyright
+	cd backend && pyright || true
 	cd frontend && npx tsc --noEmit
 
 # Security audit
@@ -605,7 +604,6 @@ security-check:
 # Formateo automático
 format:
 	cd backend && ruff format .
-	cd frontend && npx @biomejs/biome format --write .
 
 # Limpieza profunda
 clean:

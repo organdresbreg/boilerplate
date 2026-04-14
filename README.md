@@ -51,11 +51,10 @@ make run-dev
 - **Vite 6+** - Build tool con Rolldown nativo (Rust)
 - **TypeScript 5.0+** - Inferencia mejorada
 - **TanStack Query 5.5+** - Offline-first, optimistic updates
-- **Zustand 5.0+** - Estado minimalista sin re-renders
 
 ### DevOps
 - **Docker + Compose** - Contenedores multi-stage optimizados
-- **Ruff + Biome** - Linting y formateo ultrarrápidos
+- **Ruff** - Linting y formateo ultrarrápidos (Python)
 - **Pytest + Vitest** - Testing integrado backend/frontend
 - **GitHub Actions** - CI/CD con deploy preview
 
@@ -98,7 +97,7 @@ make seed             # Precargar datos de ejemplo (admin@example.com / admin123
 make backup-db        # Backup de SQLite con timestamp
 
 # Calidad
-make lint             # Ruff + Biome
+make lint             # Ruff (Python)
 make format           # Formateo automático
 make test             # Tests con coverage
 make type-check       # Type checking
