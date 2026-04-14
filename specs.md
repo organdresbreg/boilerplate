@@ -2,19 +2,19 @@
 
 <!-- 
 ╔══════════════════════════════════════════════════════════════════════════╗
-║  PLANTILLA DE ESPECIFICACIONES TÉCNICAS - BOILERPLATE 2026              ║
+║  PLANTILLA DE ESPECIFICACIONES TÉCNICAS - BOILERPLATE 2026               ║
 ║                                                                          ║
 ║  INSTRUCCIONES DE USO:                                                   ║
-║  1. Reemplaza todos los textos entre [CORCHETES] con tu información     ║
-║  2. Los ejemplos comentados sirven como guía de formato y detalle       ║
-║  3. Elimina los comentarios <!-- --> una vez completada la edición      ║
-║  4. Mantén la estructura de secciones para consistencia                 ║
+║  1. Reemplaza todos los textos entre [CORCHETES] con tu información      ║
+║  2. Los ejemplos comentados sirven como guía de formato y detalle        ║
+║  3. Elimina los comentarios una vez completada la edición                ║
+║  4. Mantén la estructura de secciones para consistencia                  ║
 ║                                                                          ║
 ║  SECCIONES PRINCIPALES:                                                  ║
-║  - Sección 1: Contexto del Proyecto (EDITAR COMPLETAMENTE)              ║
-║  - Sección 2: Especificaciones del Backend (FUENTE DE VERDAD)           ║
-║  - Sección 3: Planificación de Implementación Frontend                  ║
-║  - Sección 4: Instrucciones para el Desarrollador                       ║
+║  - Sección 1: Contexto del Proyecto (EDITAR COMPLETAMENTE)               ║
+║  - Sección 2: Especificaciones del Backend (FUENTE DE VERDAD)            ║
+║  - Sección 3: Planificación de Implementación Frontend                   ║
+║  - Sección 4: Instrucciones para el Desarrollador                        ║
 ║  - Sección 5: Notas Adicionales                                          ║
 ║  - Sección 6: Checklist de Calidad                                       ║
 ╚══════════════════════════════════════════════════════════════════════════╝
@@ -205,7 +205,7 @@ python-dotenv>=1.0.0
 
 ---
 
-## 2. Especificaciones del Backend (Fuente de Verdad)
+## 2. Especificaciones del Backend
 
 <!-- 
 [IMPORTANTE] Esta sección es CRÍTICA. El frontend debe adaptarse EXACTAMENTE a lo definido aquí.
@@ -588,8 +588,8 @@ Puedes agregar o quitar items según las necesidades de tu proyecto.
 ║  FIN DE LA PLANTILLA                                                     ║
 ║                                                                          ║
 ║  Recuerda:                                                               ║
-║  1. Reemplazar todos los [CORCHETES] con información real               ║
-║  2. Eliminar estos comentarios una vez completada la edición            ║
-║  3. Mantener actualizado este archivo si cambian las especificaciones   ║
+║  1. Reemplazar todos los [CORCHETES] con información real                ║
+║  2. Eliminar estos comentarios una vez completada la edición             ║
+║  3. Mantener actualizado este archivo si cambian las especificaciones    ║
 ╚══════════════════════════════════════════════════════════════════════════╝
 -->
