@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Backend: FastAPI + Python 3.13 (SQLite - no requiere servicio DB externo)
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: boilerplate_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SQLITE_DB_PATH: /app/data/app.db
+      DATABASE_URL: sqlite+aiosqlite:////app/data/app.db
+    ports:
+      - "${BACKEND_PORT:-8000}:8000"
+    volumes:
+      - ./backend:/app
+      - sqlite_data:/app/data
+    command: >
+      sh -c "python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Frontend: Preact + Vite
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: boilerplate_frontend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    command: >
+      sh -c "npm run dev -- --host 0.0.0.0"
+
+volumes:
+  sqlite_data:
+
+networks:
+  default:
+    name: boilerplate-network
