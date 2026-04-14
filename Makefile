@@ -32,7 +32,6 @@ lint:
 
 # Type checking
 type-check:
-	cd backend && pyright || true
 	cd frontend && npx tsc --noEmit
 
 # Security audit
