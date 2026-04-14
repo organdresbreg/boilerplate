@@ -65,7 +65,7 @@
 - **Linting:** Ruff 0.9+ (Python)
 - **Testing:** Pytest 8.5+ + pytest-asyncio (Backend), Vitest 3.0+ (Frontend)
 - **CI/CD:** GitHub Actions 2026 + Deploy preview automático
-- **Monitorización:** OpenTelemetry nativo, logs estructurados JSON
+- **Logs:** Logs estructurados JSON integrados
 
 ---
 
@@ -165,7 +165,6 @@ class Settings(BaseSettings):
     
     # Feature flags para 2026
     ENABLE_HTTP3: bool = False
-    ENABLE_OTEL: bool = True
 
 @lru_cache
 def get_settings() -> Settings:
@@ -175,7 +174,7 @@ settings = get_settings()
 ```
 
 ### `backend/app/main.py`
-Configuración centralizada con lifespan asíncrono y OpenTelemetry integrado.
+Configuración centralizada con lifespan asíncrono.
 
 ```python
 from fastapi import FastAPI
@@ -185,20 +184,13 @@ from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db.base import init_db
 
-# OpenTelemetry setup (opcional para 2026)
-if settings.ENABLE_OTEL:
-    from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
-    if settings.ENABLE_OTEL:
-        FastAPIInstrumentor.instrument_app(app)
     yield
     # Shutdown
-    if settings.ENABLE_OTEL:
-        FastAPIInstrumentor.uninstrument_app(app)
+    pass
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -436,7 +428,6 @@ services:
     environment:
       - SQLITE_DB_PATH=/app/data/app.db
       - ENVIRONMENT=development
-      - ENABLE_OTEL=false
     command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]

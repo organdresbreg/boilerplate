@@ -5,24 +5,14 @@ from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db.base import init_db
 
-# OpenTelemetry setup (opcional para 2026)
-if settings.ENABLE_OTEL:
-    try:
-        from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
-    except ImportError:
-        FastAPIInstrumentor = None  # type: ignore
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
-    if settings.ENABLE_OTEL and FastAPIInstrumentor:
-        FastAPIInstrumentor.instrument_app(app)
     yield
     # Shutdown
-    if settings.ENABLE_OTEL and FastAPIInstrumentor:
-        FastAPIInstrumentor.uninstrument_app(app)
+    pass
 
 
 # Configurar URLs de docs según flag de producción
