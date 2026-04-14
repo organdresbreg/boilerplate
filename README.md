@@ -6,7 +6,7 @@
 [![Vite 6+](https://img.shields.io/badge/Vite-6+-purple.svg)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI**, **Pydantic V3**, **SQLite**, **Preact** y **Vite**.
+Una base profesional, ligera y tipada para aplicaciones web modernas. Construida con **FastAPI**, **Pydantic v2**, **SQLite**, **Preact** y **Vite**.
 
 ## ⚡ Quick Start
 
@@ -41,7 +41,7 @@ make run-dev
 ### Backend
 - **Python 3.13+** - Últimas features y mejor rendimiento
 - **FastAPI 0.115+** - Framework moderno y rápido
-- **Pydantic V3** - Validación ultrarrápida
+- **Pydantic v2** - Validación ultrarrápida
 - **SQLModel** - ORM type-safe con SQLAlchemy 2.0
 - **SQLite (WAL)** - Serverless, ACID compliant
 - **uv** - Package manager 10-100x más rápido
@@ -49,7 +49,7 @@ make run-dev
 ### Frontend
 - **Preact 11+** - 2.8KB, compatible con React 19
 - **Vite 6+** - Build tool con Rolldown nativo (Rust)
-- **TypeScript 6.0+** - Inferencia mejorada
+- **TypeScript 5.0+** - Inferencia mejorada
 - **TanStack Query 5.5+** - Offline-first, optimistic updates
 - **Zustand 5.0+** - Estado minimalista sin re-renders
 
