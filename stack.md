@@ -406,18 +406,13 @@ class User(UserBase, table=True):
             }
         }
     }
-```
 
----
-    is_active: bool = True
 
 class User(UserBase, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     hashed_password: str
     created_at: datetime = Field(default_factory=datetime.utcnow)
-```
-
----
+    is_active: bool = True
 
 ## 🐳 Dockerización y Despliegue (2026)
 
@@ -593,7 +588,6 @@ lint:
 
 # Type checking
 type-check:
-	cd backend && pyright || true
 	cd frontend && npx tsc --noEmit
 
 # Security audit
