@@ -51,9 +51,19 @@ Revisar y editar los siguientes archivos:
 - **`LICENSE`**: Confirmá que el año y el titular del copyright sean correctos.
 - **`.env.example`**: Ajustá las variables de entorno si tu proyecto requiere servicios adicionales.
 
-### 2.2. 📋 Definición de Especificaciones (`specs.md`)
+### 2.2. Paso 0: Definición de Especificaciones
 
-Editar el archivo `specs.md` en la raíz del proyecto. Este documento será la fuente única de verdad para los requisitos particulares, diferenciándolos de la arquitectura base del boilerplate.
+**IMPORTANTE:** Antes de escribir cualquier línea de código, debés definir las especificaciones de tu módulo:
+
+```bash
+# 1. Copiar la plantilla base
+cp specs.template.md specs.md
+
+# 2. Editar specs.md completando todos los marcadores [ENTRE_CORCHETES]
+# Este documento será la fuente única de verdad para los requisitos de tu módulo
+```
+
+> 💡 **Nota:** La plantilla `specs.template.md` contiene una estructura metodológica completa basada en DDD y Agile. Completarla antes de codificar garantiza una implementación coherente y reduce la deuda técnica.
 
 ## 3. 🔄 Flujo de Trabajo Recomendado
 
@@ -90,7 +100,7 @@ Completá esta lista antes de iniciar el desarrollo activo:
 
 - [ ] Historial de Git original eliminado y nuevo repositorio inicializado
 - [ ] Repositorio remoto configurado correctamente
-- [ ] Archivo `specs.md` editado con los requisitos del proyecto
+- [ ] Plantilla `specs.template.md` copiada a `specs.md` y completada con los requisitos del módulo
 - [ ] Metadatos en `README`, `package.json` y `pyproject.toml` actualizados
 - [ ] Archivo `.env` generado y configurado con valores locales
 - [ ] Contenedores Docker iniciados correctamente (`make dev` o `docker-compose up`)
