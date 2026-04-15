@@ -36,6 +36,8 @@ make run-dev
 | **Edge-Ready** | Preparado para despliegue en edge computing |
 | **Minimalista** | Solo dependencias estrictamente necesarias. Cada librería debe justificar su existencia. |
 | **SQLite → PostgreSQL** | Desarrollo simple (SQLite), producción escalable (PostgreSQL). Cambia solo `DATABASE_URL`. |
+| **Secure by Default** | Rate limiting nativo, manejo global de excepciones, bcrypt directo, sin fugas de información. |
+| **UX Completa** | Protección de rutas robusta, manejo global de errores UI, notificaciones visuales automáticas. |
 
 ## 🛠️ Stack Tecnológico
 
@@ -58,7 +60,8 @@ make run-dev
 - **CSS Modules** - Estilos con scope local automático, cero configuración, sin dependencias adicionales
 
 ### DevOps
-- **Docker + Compose** - Contenedores multi-stage optimizados
+- **Docker + Compose** - Contenedores multi-stage optimizados, logs rotados (10MB, 3 archivos)
+- **docker-compose.prod.yml** - Configuración de producción con redes aisladas, migraciones automáticas, límites de recursos
 - **Ruff 0.9.4** - Linting y formateo ultrarrápidos (Python), unificado
 - **Pytest 8.3.4 + pytest-asyncio 0.25.3 (Backend), Vitest 3.0.5 (Frontend)** - Testing integrado backend/frontend
 - **GitHub Actions** - CI/CD con deploy preview
@@ -174,14 +177,26 @@ El proyecto incluye configuración Docker optimizada:
 - **Hot reload** - Volúmenes montados para desarrollo
 - **Health checks** - Monitoreo automático de servicios
 - **Non-root users** - Seguridad por defecto
+- **Logs rotados** - Driver json-file con max-size 10MB y 3 archivos retenidos
+- **docker-compose.prod.yml** - Producción lista con redes aisladas, migraciones automáticas, límites de recursos
 
 ```bash
-# Iniciar todos los servicios
+# Iniciar todos los servicios (desarrollo)
 docker compose up --build
 
 # Solo producción
 docker compose -f docker-compose.prod.yml up
 ```
+
+### Características de Producción
+
+El archivo `docker-compose.prod.yml` incluye:
+- ✅ **Sin código fuente montado** - Seguridad reforzada
+- ✅ **Redes internas aisladas** - Comunicación segura entre servicios
+- ✅ **Migraciones automáticas** - Servicio `db-migrate` ejecuta Alembic antes del startup
+- ✅ **Límites de recursos** - CPU y memoria controlados
+- ✅ **Reinicio automático** - `restart: unless-stopped`
+- ✅ **Logs estructurados** - Rotación configurada para todos los servicios
 
 ## ✅ Checklist de Producción
 
