@@ -55,6 +55,7 @@ make run-dev
 - **TypeScript 5.7.3** - Inferencia mejorada
 - **TanStack Query 5.66.0** - Offline-first, optimistic updates, caché inteligente
 - **Preact Router 4.1.2** - Lazy loading nativo, transiciones integradas
+- **CSS Modules** - Estilos con scope local automático, cero configuración, sin dependencias adicionales
 
 ### DevOps
 - **Docker + Compose** - Contenedores multi-stage optimizados
