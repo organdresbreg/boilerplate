@@ -119,8 +119,6 @@
 │   ├── index.html
 │   ├── package.json
 │   ├── tsconfig.json
-│   ├── tailwind.config.js  # Si se usa Tailwind
-│   ├── postcss.config.js
 │   ├── vite.config.ts
 │   └── Dockerfile
 │
@@ -227,6 +225,79 @@ async def root():
 ---
 
 ## 🎨 Configuración del Frontend (Preact + Vite)
+
+### Estrategia de Estilos: CSS Modules
+
+Este proyecto utiliza **CSS Modules** como estrategia oficial de estilos, alineada con los principios de minimalismo y modularidad.
+
+**¿Por qué CSS Modules?**
+- ✅ **Scope local automático:** Los nombres de clase se transforman globalmente únicos, evitando colisiones.
+- ✅ **Cero configuración:** Vite 8 soporta CSS Modules nativamente (`*.module.css`).
+- ✅ **Rendimiento óptimo:** CSS puro, sin runtime JavaScript ni bundles pesados.
+- ✅ **TypeScript friendly:** Tipado automático de clases importadas.
+- ✅ **Minimalismo:** Sin dependencias adicionales (styled-components, Emotion, Tailwind).
+
+**Ejemplo de uso:**
+
+```css
+/* Button.module.css */
+.button {
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.primary {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.primary:hover {
+  background-color: #2563eb;
+}
+
+.secondary {
+  background-color: #e5e7eb;
+  color: #374151;
+}
+
+.secondary:hover {
+  background-color: #d1d5db;
+}
+```
+
+```tsx
+/* Button.tsx */
+import styles from './Button.module.css'
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary'
+  children: string
+  onClick?: () => void
+}
+
+export function Button({ variant = 'primary', children, onClick }: ButtonProps) {
+  const className = variant === 'primary' ? styles.primary : styles.secondary
+  
+  return (
+    <button 
+      className={`${styles.button} ${className}`}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  )
+}
+```
+
+**Buenas prácticas:**
+- Usar nombres descriptivos en los archivos: `ComponentName.module.css`
+- Componer clases locales cuando sea necesario
+- Evitar selectores globales (`:global()`) salvo casos excepcionales
+- Mantener los módulos pequeños y enfocados en un componente
+
+---
 
 ### `frontend/vite.config.ts`
 Optimizado para Vite 8, alias y proxy de API.
