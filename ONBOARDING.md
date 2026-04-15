@@ -53,17 +53,24 @@ Revisar y editar los siguientes archivos:
 
 ### 2.2. Paso 0: Definición de Especificaciones
 
-**IMPORTANTE:** Antes de escribir cualquier línea de código, debés definir las especificaciones de tu módulo:
+**⚠️ IMPORTANTE:** El archivo `specs.md` **NO existe inicialmente** en el repositorio. Debes generarlo a partir de la plantilla maestra antes de comenzar cualquier desarrollo.
+
+Este paso es obligatorio para garantizar que la lógica de negocio esté claramente definida antes de implementar código.
 
 ```bash
-# 1. Copiar la plantilla base
+# 1. Copiar la plantilla base para crear tu archivo de especificaciones
 cp specs.template.md specs.md
 
-# 2. Editar specs.md completando todos los marcadores [ENTRE_CORCHETES]
-# Este documento será la fuente única de verdad para los requisitos de tu módulo
+# 2. Editar specs.md completando TODOS los marcadores [ENTRE_CORCHETES]
+# Este documento será la fuente única de verdad para los requisitos de tu módulo/proyecto
 ```
 
-> 💡 **Nota:** La plantilla `specs.template.md` contiene una estructura metodológica completa basada en DDD y Agile. Completarla antes de codificar garantiza una implementación coherente y reduce la deuda técnica.
+**Instrucciones de edición:**
+- Reemplazá cada marcador (ej: `[NOMBRE_DEL_MODULO]`, `[ENTIDAD_PRINCIPAL]`) con los valores reales de tu proyecto.
+- No dejés ningún marcador sin completar.
+- Definí claramente las reglas de negocio, flujos de trabajo y contratos de API.
+
+> 💡 **Nota:** La plantilla `specs.template.md` contiene una estructura metodológica completa basada en DDD y Agile. Completarla antes de codificar garantiza una implementación coherente, reduce la deuda técnica y asegura que todos los stakeholders tengan claridad sobre los requisitos.
 
 ## 3. 🔄 Flujo de Trabajo Recomendado
 
