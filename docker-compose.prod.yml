@@ -26,6 +26,11 @@ services:
         - ENVIRONMENT=production
     container_name: modular-app-backend
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     environment:
       - DATABASE_URL=postgresql+asyncpg://${DB_USER:-appuser}:${DB_PASSWORD:-changeme}@db:5432/${DB_NAME:-appdb}
       - SECRET_KEY=${SECRET_KEY}
@@ -65,6 +70,16 @@ services:
         - VITE_API_BASE_URL=/api
     container_name: modular-app-frontend
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     depends_on:
       - backend
     healthcheck:
@@ -85,6 +100,21 @@ services:
     image: postgres:16-alpine
     container_name: modular-app-db
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     environment:
       - POSTGRES_USER=${DB_USER:-appuser}
       - POSTGRES_PASSWORD=${DB_PASSWORD:-changeme}
@@ -114,6 +144,26 @@ services:
     image: nginx:alpine
     container_name: modular-app-nginx
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
     ports:
       - "80:80"
       # - "443:443" # Descomentar si se montan certificados SSL
