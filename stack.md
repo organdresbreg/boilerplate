@@ -31,6 +31,8 @@
 - **Developer Experience (DX):** Hot reload instantáneo, linting automático, testing integrado.
 - **Edge-Ready:** Arquitectura preparada para despliegue en edge computing.
 - **Sustainability:** Código optimizado para menor consumo energético.
+- **Secure by Default:** Rate limiting nativo, manejo global de excepciones, hashing bcrypt directo, sin fugas de información en errores.
+- **UX Completa:** Protección de rutas robusta, manejo global de errores UI, notificaciones visuales automáticas.
 
 ---
 
@@ -62,13 +64,14 @@
 
 ### DevOps & Calidad
 - **Contenedores:** Docker + Docker Compose v3 (Multi-stage builds optimizados)
+- **docker-compose.prod.yml:** Producción lista con redes aisladas, migraciones automáticas, límites de recursos, logs rotados
+- **Logs:** Driver json-file con rotación (10MB max, 3 archivos), formato estructurado JSON
 - **Linting:** Ruff 0.9.4 (Python) - Linter y formateador unificado
 - **Testing Backend:** Pytest 8.3.4 + pytest-asyncio 0.25.3 + pytest-cov 6.0.0
 - **Testing Frontend:** Vitest 3.0.5 (Entorno nativo para Vite)
 - **HTTP Client Tests:** httpx 0.28.1 (Cliente HTTP asíncrono para FastAPI)
 - **Security Audit:** pip-audit 2.8.2 (Análisis de vulnerabilidades)
 - **CI/CD:** GitHub Actions 2026 + Deploy preview automático
-- **Logs:** Logs estructurados JSON integrados
 
 ---
 
@@ -175,31 +178,58 @@ settings = get_settings()
 ```
 
 ### `backend/app/main.py`
-Configuración centralizada con lifespan asíncrono.
+Configuración centralizada con lifespan asíncrono, rate limiting y manejo global de excepciones.
 
 ```python
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from app.core.config import settings
 from app.api.v1.router import api_router
 from app.db.base import init_db
+from collections import defaultdict
+import time
+import logging
+
+# Configurar logging estructurado
+logging.basicConfig(
+    level=logging.INFO,
+    format='{"timestamp": "%(asctime)s", "level": "%(levelname)s", "message": "%(message)s"}'
+)
+logger = logging.getLogger(__name__)
+
+# Rate Limiter simple en memoria
+class RateLimiter:
+    def __init__(self):
+        self.requests = defaultdict(list)
+    
+    def is_allowed(self, client_ip: str, max_requests: int, window_seconds: int) -> bool:
+        now = time.time()
+        self.requests[client_ip] = [t for t in self.requests[client_ip] if now - t < window_seconds]
+        if len(self.requests[client_ip]) >= max_requests:
+            return False
+        self.requests[client_ip].append(now)
+        return True
+
+rate_limiter = RateLimiter()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
     await init_db()
+    logger.info("Application started successfully")
     yield
     # Shutdown
-    pass
+    logger.info("Application shutting down")
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
     version=settings.VERSION,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     lifespan=lifespan,
-    docs_url="/docs",  # Swagger UI
-    redoc_url="/redoc",  # ReDoc
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
 # CORS
@@ -210,6 +240,50 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Rate Limiting Middleware
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    client_ip = request.client.host
+    path = request.url.path
+    
+    # Endpoints críticos con límite estricto (login, register)
+    if any(endpoint in path for endpoint in ["/login", "/register", "/auth"]):
+        if not rate_limiter.is_allowed(client_ip, max_requests=5, window_seconds=60):
+            logger.warning(f"Rate limit exceeded for IP: {client_ip} on {path}")
+            return JSONResponse(
+                status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+                content={"detail": "Too many requests. Please try again later."}
+            )
+    
+    # Límite general más permisivo
+    if not rate_limiter.is_allowed(client_ip, max_requests=100, window_seconds=60):
+        return JSONResponse(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            content={"detail": "Too many requests. Please try again later."}
+        )
+    
+    response = await call_next(request)
+    return response
+
+# Manejo Global de Excepciones
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    logger.error(f"Unhandled exception: {str(exc)}", exc_info=True)
+    # En producción, no revelar detalles internos
+    return JSONResponse(
+        status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        content={"detail": "Internal server error"} if settings.DISABLE_DOCS else {"detail": str(exc)}
+    )
+
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    if exc.status_code >= 500:
+        logger.error(f"HTTP error {exc.status_code}: {exc.detail}")
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={"detail": exc.detail}
+    )
 
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
@@ -377,24 +451,181 @@ render(
 ```
 
 ### `frontend/src/App.tsx`
-Ejemplo con Preact Router 4.1.2 y Signals.
+Ejemplo con Preact Router 4.1.2, protección de rutas y manejo global de errores.
 
 ```tsx
 import { Router, Route } from 'preact-router'
 import { Home } from './pages/Home'
 import { About } from './pages/About'
 import { Header } from './components/Header'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { AuthGuard } from './components/AuthGuard'
+import { ErrorBanner } from './components/ErrorBanner'
 
 export function App() {
   return (
     <div class="app">
+      <AuthGuard />
+      <ErrorBanner />
       <Header />
       <Router>
         <Route path="/" component={Home} />
         <Route path="/about" component={About} />
+        <Route path="/dashboard">
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        </Route>
       </Router>
     </div>
   )
+}
+```
+
+### Componentes de UX: Protección de Rutas y Manejo de Errores
+
+**`frontend/src/components/ProtectedRoute.tsx`** - Protección robusta de rutas sin parpadeos:
+
+```tsx
+import { JSX } from 'preact'
+import { useState, useEffect } from 'preact/hooks'
+import { Navigate } from 'preact-router'
+import { useAuthStore } from '../store/authStore'
+
+interface ProtectedRouteProps {
+  children: JSX.Element
+}
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
+  const { isAuthenticated, isLoading } = useAuthStore()
+  const [isClient, setIsClient] = useState(false)
+
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+
+  // Evitar renderizado en servidor o durante hidratación
+  if (!isClient || isLoading) {
+    return <div>Cargando...</div>
+  }
+
+  if (!isAuthenticated) {
+    return <Navigate url="/login" replace />
+  }
+
+  return children
+}
+```
+
+**`frontend/src/components/AuthGuard.tsx`** - Escucha global de errores de autenticación:
+
+```tsx
+import { useEffect } from 'preact/hooks'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAuthStore } from '../store/authStore'
+import { Navigate } from 'preact-router'
+
+export function AuthGuard() {
+  const queryClient = useQueryClient()
+  const { logout, isAuthenticated } = useAuthStore()
+
+  useEffect(() => {
+    const handleAuthError = () => {
+      logout()
+      queryClient.clear()
+    }
+
+    // Escuchar eventos de error 401/403
+    window.addEventListener('auth-error', handleAuthError)
+    
+    return () => {
+      window.removeEventListener('auth-error', handleAuthError)
+    }
+  }, [logout, queryClient])
+
+  return null
+}
+```
+
+**`frontend/src/components/ErrorBanner.tsx`** - Notificaciones visuales de errores:
+
+```tsx
+import { useState, useEffect } from 'preact/hooks'
+
+interface Error {
+  id: string
+  message: string
+  type: 'error' | 'warning' | 'info'
+}
+
+export function ErrorBanner() {
+  const [errors, setErrors] = useState<Error[]>([])
+
+  useEffect(() => {
+    const handleError = (event: CustomEvent<Error>) => {
+      setErrors(prev => [...prev, event.detail])
+      
+      // Auto-dismiss después de 5 segundos
+      setTimeout(() => {
+        setErrors(prev => prev.filter(e => e.id !== event.detail.id))
+      }, 5000)
+    }
+
+    window.addEventListener('show-error', handleError as EventListener)
+    
+    return () => {
+      window.removeEventListener('show-error', handleError as EventListener)
+    }
+  }, [])
+
+  if (errors.length === 0) return null
+
+  return (
+    <div class="fixed top-4 right-4 z-50 space-y-2">
+      {errors.map(error => (
+        <div
+          key={error.id}
+          class={`px-4 py-2 rounded shadow-lg text-white ${
+            error.type === 'error' ? 'bg-red-500' :
+            error.type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+          }`}
+        >
+          {error.message}
+        </div>
+      ))}
+    </div>
+  )
+}
+```
+
+**`frontend/src/lib/errorHandler.ts`** - Utilidad para disparar errores UI:
+
+```ts
+interface AppError {
+  id: string
+  message: string
+  type: 'error' | 'warning' | 'info'
+}
+
+export function showError(message: string, type: 'error' | 'warning' | 'info' = 'error') {
+  const error: AppError = {
+    id: crypto.randomUUID(),
+    message,
+    type
+  }
+  
+  window.dispatchEvent(new CustomEvent('show-error', { detail: error }))
+}
+
+export function handleApiError(error: unknown) {
+  if (error instanceof Response && error.status === 401) {
+    window.dispatchEvent(new CustomEvent('auth-error'))
+    showError('Sesión expirada. Por favor inicia sesión nuevamente.', 'error')
+  } else if (error instanceof Error) {
+    showError(error.message, 'error')
+  } else {
+    showError('Ocurrió un error inesperado', 'error')
+  }
 }
 ```
 
